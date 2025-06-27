@@ -1,0 +1,23 @@
+[
+  {"source": "服务器A", "relation": "部署", "target": "防火墙", "type": "安全技术保障"},
+  {"source": "服务器B", "relation": "审计", "target": "访问日志", "type": "管理措施"},
+  {"source": "自然资源部", "relation": "发布", "target": "《数据安全法》", "type": "法律法规"},
+  {"source": "数据库C", "relation": "存储", "target": "遥感影像数据", "type": "数据类型"},
+  {"source": "服务器D", "relation": "遭受", "target": "SQL注入攻击", "type": "风险类别"},
+  {"source": "审批系统", "relation": "服务于", "target": "土地确权", "type": "应用场景"},
+  {"source": "遥感监测系统", "relation": "运行在", "target": "内网", "type": "网络环境"},
+  {"source": "外包公司E", "relation": "负责", "target": "平台维护", "type": "参与人员"},
+  {"source": "地理数据库", "relation": "采用", "target": "SHP格式", "type": "数据格式"},
+  {"source": "生态保护区数据", "relation": "应用于", "target": "生态红线划定", "type": "自然资源网络信息类型"},
+  
+  {"source": "服务器E", "relation": "被攻击IP", "target": "192.168.3.10", "type": "扫描"},
+  {"source": "服务器F", "relation": "被攻击IP", "target": "192.168.3.10", "type": "暴力破解"},
+  {"source": "服务器G", "relation": "被攻击IP", "target": "192.168.4.20", "type": "扫描"},
+  {"source": "审批系统", "relation": "遭受", "target": "权限提升攻击", "type": "风险类别"},
+  {"source": "不动产登记平台", "relation": "存储", "target": "不动产权属信息", "type": "数据类型"},
+  {"source": "规划管理人员", "relation": "审批", "target": "国土空间规划数据", "type": "管理措施"},
+  {"source": "政务云平台", "relation": "部署于", "target": "专网", "type": "网络环境"},
+  {"source": "测绘公司", "relation": "采集", "target": "基础地理数据", "type": "参与人员"},
+  {"source": "水资源数据库", "relation": "采用", "target": "CSV格式", "type": "数据格式"},
+  {"source": "地质调查数据", "relation": "应用于", "target": "矿产储量评估", "type": "自然资源网络信息类型"}
+]
