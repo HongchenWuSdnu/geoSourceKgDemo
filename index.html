@@ -5,15 +5,28 @@
   <title>数某院×山东某高校 知识图谱与安全预警演示</title>
   <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
   <style>
-    #network { width: 100%; height: 500px; border: 1px solid #ccc; }
+    #network { width: 100%; height: 400px; border: 1px solid #ccc; margin-bottom: 20px;}
     .warn { color: red; font-weight: bold; }
     body { font-family: "Microsoft YaHei", "微软雅黑", "Arial", sans-serif; }
+    #input-area { margin: 20px 0; }
+    #risk, #plan { margin-top: 10px; font-size: 1.1em; }
+    #risk { color: #c00; }
+    #plan { color: #174edb; }
   </style>
 </head>
 <body>
   <h2>数某院×山东某高校 知识图谱与安全预警演示</h2>
   <div id="network"></div>
   <div id="warn"></div>
+
+  <div id="input-area">
+    <h3>知识内容智能分析</h3>
+    <input type="text" id="userInput" style="width:60%;" placeholder="请输入安全事件或知识内容" />
+    <button onclick="analyze()">分析</button>
+    <div id="risk"></div>
+    <div id="plan"></div>
+  </div>
+  
   <script>
     // 读取 triples.json，需与 index.html 放同目录
     fetch('triples.json')
@@ -34,7 +47,6 @@
         // 统计被攻击IP出现次数，实现预警
         let ipCount = {};
         triples.forEach(tri => {
-          // 只统计 relation 为被攻击IP 的场景
           if(tri.relation === '被攻击IP'){
             ipCount[tri.target] = (ipCount[tri.target] || 0) + 1;
           }
@@ -65,6 +77,38 @@
           .map(ip => `<span class="warn">⚠️ 高风险IP: ${ip} （攻击${ipCount[ip]}台服务器）</span>`).join("<br>");
         document.getElementById('warn').innerHTML = warnStr || "暂无高风险IP";
       });
+
+    // 风险类别和应急预案规则（可扩展）
+    const riskRules = [
+      {keyword: ["病毒", "木马", "勒索"], risk: "恶意软件攻击", plan: "立即隔离受感染主机，进行病毒查杀，恢复数据并修补漏洞。"},
+      {keyword: ["SQL注入", "注入攻击"], risk: "SQL注入风险", plan: "关闭相关端口，加强输入校验，修补程序漏洞，并监控数据库访问日志。"},
+      {keyword: ["数据泄露", "信息泄露"], risk: "数据泄露", plan: "立即停止泄露通道，追踪数据流向，通报管理部门，通知受影响用户并升级防护。"},
+      {keyword: ["DDoS", "拒绝服务"], risk: "DDoS攻击", plan: "启动流量清洗服务，切换备用带宽，封禁攻击源IP。"},
+      {keyword: ["越权", "权限提升"], risk: "权限越界风险", plan: "立即回收异常账户权限，排查操作日志，修复系统漏洞，强化访问控制。"},
+      {keyword: ["内网", "专网"], risk: "内网安全风险", plan: "加强内网访问监控，定期审计内网设备和用户操作。"},
+      {keyword: ["恶意登录", "爆破"], risk: "账户爆破攻击", plan: "锁定高频登录IP，强制更换弱口令，加强多因子认证。"},
+      {keyword: ["地理数据", "遥感", "测绘"], risk: "地理信息泄露", plan: "限制敏感地理数据下载权限，加强数据脱敏和访问日志审计。"},
+      {keyword: ["不动产", "权属"], risk: "隐私数据泄露", plan: "封锁非授权访问，启动审计追踪，通知数据所有者并强化授权流程。"},
+      {keyword: ["扫描", "探测"], risk: "端口扫描威胁", plan: "屏蔽异常源IP，检查防火墙规则，增强入侵检测。"}
+    ];
+
+    function analyze() {
+      const input = document.getElementById('userInput').value;
+      let matched = null;
+      for (let rule of riskRules) {
+        for (let kw of rule.keyword) {
+          if (input.includes(kw)) {
+            matched = rule;
+            break;
+          }
+        }
+        if (matched) break;
+      }
+      document.getElementById('risk').innerHTML = matched ?
+        `判定风险类别：<b>${matched.risk}</b>` : '未识别风险类别';
+      document.getElementById('plan').innerHTML = matched ?
+        `应急预案建议：${matched.plan}` : '';
+    }
   </script>
 </body>
 </html>
