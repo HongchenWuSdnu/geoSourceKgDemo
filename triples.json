@@ -19,5 +19,6 @@
   {"source": "政务云平台", "relation": "部署于", "target": "专网", "type": "网络环境"},
   {"source": "测绘公司", "relation": "采集", "target": "基础地理数据", "type": "参与人员"},
   {"source": "水资源数据库", "relation": "采用", "target": "CSV格式", "type": "数据格式"},
-  {"source": "地质调查数据", "relation": "应用于", "target": "矿产储量评估", "type": "自然资源网络信息类型"}
+  {"source": "地质调查数据", "relation": "应用于", "target": "矿产储量评估", "type": "自然资源网络信息类型"},
+  {"source": "海岛存储数据", "relation": "被攻击IP", "target": "192.168.3.10", "type": "嗅探攻击"}
 ]
