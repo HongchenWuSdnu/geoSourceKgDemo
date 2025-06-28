@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>数某院×山东某高校 网络自然资源地理信息安全评估体系与知识图谱预警系统演示</title>
+  <title>数某院×山东某高校 知识图谱与安全预警系统演示</title>
   <script src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
   <style>
     #network { width: 100%; height: 500px; border: 1px solid #ccc; margin-bottom: 16px;}
@@ -16,13 +16,13 @@
   </style>
 </head>
 <body>
-  <h2>数某院×山东某高校 网络自然资源地理信息安全评估体系与知识图谱预警系统演示</h2>
+  <h2>数某院×山东某高校 知识图谱与安全预警系统演示</h2>
   <div id="network"></div>
 
   <!-- 知识检索 -->
   <div id="input-area">
     <h3>术语检索与分类导航</h3>
-    <input type="text" id="searchInput" style="width:55%;" placeholder="输入术语、类别、类型或实例（如“内网”或“数据泄露”）" />
+    <input type="text" id="searchInput" style="width:55%;" placeholder="输入术语、类别、类型或实例（如“技术标准”、“内网”或“数据泄露”）" />
     <button onclick="searchTriple()">检索</button>
     <button onclick="resetGraph()">重置图谱</button>
     <div id="search-result"></div>
@@ -70,8 +70,28 @@
           arrows: 'to'
         });
       });
+      // 高亮节点显著描边+发光+加大
       highlightNodes.forEach(n=>{
-        if(nodes[n]) nodes[n].color='#FF8000';
+        if(nodes[n]) {
+          nodes[n].color = {
+            background: '#FF8000',
+            border: '#ffa500',
+            highlight: {
+              background: '#FFD700',
+              border: '#ff0000'
+            }
+          };
+          nodes[n].borderWidth = 6;
+          nodes[n].size = 40;
+          nodes[n].font = { color: "#000", size: 22, bold: true };
+          nodes[n].shadow = {
+            enabled: true,
+            color: '#FFD700',
+            size: 25,
+            x: 0,
+            y: 0
+          };
+        }
       });
       const container = document.getElementById('network');
       const visData = { nodes: Object.values(nodes), edges: edges };
@@ -86,7 +106,12 @@
             treeSpacing: 200
           }
         },
-        nodes: { shape: 'ellipse', size: 25, font: { size: 16 }},
+        nodes: {
+          shape: 'ellipse',
+          size: 25,
+          font: { size: 16 },
+          borderWidth: 2
+        },
         edges: { font: { align: 'top' }, color: '#848484', arrows: 'to', smooth: true },
         physics: {enabled: false},
         interaction: {dragNodes: true, zoomView: true}
