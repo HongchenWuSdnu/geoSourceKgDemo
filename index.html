@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>自然资源地理信息网络安全术语与类型分类汇编</title>
+  <title>数某院×山东某高校 知识图谱与安全预警系统演示</title>
   <script src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
   <style>
     #network { width: 100%; height: 500px; border: 1px solid #ccc; margin-bottom: 16px;}
@@ -16,7 +16,7 @@
   </style>
 </head>
 <body>
-  <h2>自然资源地理信息网络安全术语与类型分类知识库</h2>
+  <h2>数某院×山东某高校 知识图谱与安全预警系统演示</h2>
   <div id="network"></div>
 
   <!-- 知识检索 -->
@@ -32,9 +32,9 @@
   <div id="add-area">
     <h3>新增术语或分类知识</h3>
     术语: <input type="text" id="add-source" size="10" placeholder="如 身份认证">
-    属性: <input type="text" id="add-relation" size="10" placeholder="如 属于/应用于">
+    属性: <input type="text" id="add-relation" size="10" placeholder="如 属于/应用于/评估特性">
     对象/分类: <input type="text" id="add-target" size="10" placeholder="如 技术层面">
-    类型: <input type="text" id="add-type" size="10" placeholder="如 技术/管理/案例/风险等">
+    类型: <input type="text" id="add-type" size="10" placeholder="如 技术/风险/案例等">
     <button onclick="addTriple()">添加并刷新</button>
     <button id="export-btn" onclick="exportJson()">导出知识库json</button>
     <span style="font-size:12px;color:#888;">（导出后可上传回仓库覆盖triples.json）</span>
@@ -113,7 +113,29 @@
         if(!highlight.includes(tri.source)) highlight.push(tri.source);
         if(!highlight.includes(tri.target)) highlight.push(tri.target);
       });
-      document.getElementById('search-result').innerHTML = "共找到"+matched.length+"条相关知识。";
+      // 拼接句子形式+邮件正文
+      let html = `共找到${matched.length}条相关知识：<br>`;
+      let mailText = `共找到${matched.length}条相关知识：\n`;
+      matched.forEach((tri, idx) => {
+        let sentence = '';
+        if(tri.relation && tri.relation.includes('应用于')) {
+          sentence = `【应用场景】${tri.source} 应用于 ${tri.target}`;
+        } else if(tri.relation && tri.relation.includes('属于')) {
+          sentence = `【类别】${tri.source} 属于 ${tri.target}`;
+        } else if(tri.relation && tri.relation.includes('评估特性')) {
+          sentence = `${tri.source} 评估特性为 ${tri.target}`;
+        } else if((tri.relation && tri.relation.includes('风险')) || (tri.type && tri.type.includes('风险'))) {
+          sentence = `${tri.source} 风险种类为 ${tri.target}`;
+        } else {
+          sentence = `${tri.source} ${tri.relation} ${tri.target}`;
+        }
+        html += `${idx + 1}. ${sentence}<br>`;
+        mailText += `${idx + 1}. ${sentence}\n`;
+      });
+      // 邮箱按钮
+      const mailto = `mailto:wuhongchen@sdnu.edu.cn?subject=知识库检索结果&body=${encodeURIComponent(mailText)}`;
+      html += `<br><button onclick="window.location.href='${mailto}'">发送到邮箱</button>`;
+      document.getElementById('search-result').innerHTML = html;
       drawNetwork(triples, highlight);
     }
 
